@@ -7,7 +7,7 @@ function SplashScreen({navigation}: {navigation: any}): React.JSX.Element {
     return () => clearTimeout(timeout);
   }, []);
   return (
-    <SafeAreaView >
+    <SafeAreaView className='flex-1 justify-center items-center'>
       <Text className='text-red-600'> Nguyễn Sỹ Hoàng Lâm - 20110514</Text>
     </SafeAreaView>
   );

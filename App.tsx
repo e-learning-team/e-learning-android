@@ -1,15 +1,23 @@
 // import { StatusBar } from 'expo-status-bar';
 // import { StyleSheet, Text, View } from 'react-native';
-// import React from 'react';
-// import {useTailwind} from 'nativewind';
+
 // export default function App() {
 //   return (
-//     <View className="flex-1 items-center justify-center bg-slate-400">
-//       <Text className='text-amber-700'>Open up App.js to start working ons your app!</Text>
+//     <View style={styles.container}>
+//       <Text>Open up App.tsx to start working on your app!</Text>
+//       <StatusBar style="auto" />
 //     </View>
 //   );
 // }
 
+// const styles = StyleSheet.create({
+//   container: {
+//     flex: 1,
+//     backgroundColor: '#fff',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//   },
+// });
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -31,5 +39,4 @@ function App(): React.JSX.Element {
     </NavigationContainer>
   );
 }
-
 export default App;
