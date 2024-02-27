@@ -7,7 +7,7 @@ function Home(): React.JSX.Element {
   return (
 
     <View className='flex-1 justify-center'>
-      <Text className='text-red-500'>asd</Text>
+      <Text className='text-red-500'>Home</Text>
     </View>
   );
 }
