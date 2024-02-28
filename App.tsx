@@ -22,32 +22,34 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import React from 'react';
-import SplashScreen from './src/screens/SplashScreen';
-import Home from './src/screens/Home';
 import { Text, View } from 'react-native';
-import { MainLayout } from './src/screens';
+import {
+    MainLayout,
+    Home,
+    SplashScreen,
+} from './src/screens';
 const Stack = createStackNavigator();
 function App(): React.JSX.Element {
-  return (
-    // <NavigationContainer>
-    //   <Stack.Navigator>
-    //     <Stack.Screen name="SplashScreen" component={SplashScreen} />
-    //     <Stack.Screen name="Home" component={Home} />
-    //   </Stack.Navigator>
-    // </NavigationContainer>
-    <NavigationContainer>
+    return (
+        // <NavigationContainer>
+        //   <Stack.Navigator>
+        //     <Stack.Screen name="Home" component={Home} />
+        //   </Stack.Navigator>
+        // </NavigationContainer>
+        <NavigationContainer>
             <Stack.Navigator
                 screenOptions={{
                     headerShown: false
                 }}
-                initialRouteName={'Dashboard'}
+                // initialRouteName={'Dashboard'}
             >
+                <Stack.Screen name="SplashScreen" component={SplashScreen} />
                 <Stack.Screen
                     name="Dashboard"
                     component={MainLayout}
                 />
             </Stack.Navigator>
-        </NavigationContainer>
-  );
+        </NavigationContainer >
+    );
 }
 export default App;

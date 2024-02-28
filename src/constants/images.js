@@ -16,7 +16,7 @@ const thumbnail_1 = require("../assets/images/thumbnail_1.png")
 const thumbnail_2 = require("../assets/images/thumbnail_2.png")
 const thumbnail_3 = require("../assets/images/thumbnail_3.png")
 const thumbnail_4 = require("../assets/images/thumbnail_4.png")
-
+const splash_screen_logo = require("../assets/images/splash_screen_logo.png")
 export default {
     bg,
     bg_dark,
@@ -39,4 +39,6 @@ export default {
     thumbnail_2,
     thumbnail_3,
     thumbnail_4,
+
+    splash_screen_logo
 }

@@ -6,8 +6,6 @@ import {
     Text,
     TouchableOpacity
 } from 'react-native';
-import { Shadow } from 'react-native-shadow-2';
-
 
 import { COLORS, SIZES, FONTS, constants } from '../constants';
 import Home from './Home';
@@ -26,7 +24,7 @@ const TabIndicator = ({ measureLayout, scrollX }: any) => {
     });
     const translateX = scrollX.interpolate({
         inputRange,
-        outputRange: measureLayout.map((measure: any) => measure.width)
+        outputRange: measureLayout.map((measure: any) => measure.x)
     });
     return (
         <Animated.View className={``}
@@ -45,7 +43,7 @@ const TabIndicator = ({ measureLayout, scrollX }: any) => {
         </Animated.View>
     );
 };
-const Tab = ({ scrollX }: any) => {
+const Tab = ({ scrollX, onBottomTabPress }: any) => {
     const [measures, setMeasures] = useState<{ x: number; y: number; width: number; height: number; }[]>([]);
     const containerRef = useRef<View>(null);
 
@@ -66,7 +64,7 @@ const Tab = ({ scrollX }: any) => {
         // console.log('measures', measures.length);
     }, [containerRef.current]);
     return (
-        <View className='flex-row'
+        <View className='flex-row justify-between items-center'
             ref={containerRef as any}
             style={{
                 flex: 1,
@@ -88,7 +86,9 @@ const Tab = ({ scrollX }: any) => {
                             alignItems: 'center',
                             paddingHorizontal: 15,
                             justifyContent: 'center'
-                        }}>
+                        }}
+                        onPress={() => onBottomTabPress(index)}
+                    >
                         <Image
                             source={item.icon}
                             resizeMode='contain'
@@ -113,8 +113,16 @@ const Tab = ({ scrollX }: any) => {
     );
 };
 const MainLayout = () => {
-    const flatListRef = React.useRef(null);
+
+    const flatListRef = React.useRef<Animated.FlatList>(null);
     const scrollX = React.useRef(new Animated.Value(0)).current;
+
+    const onBottomTabPress = React.useCallback((bottomTabIndex: any) => {
+        flatListRef?.current?.scrollToOffset({
+            offset: bottomTabIndex * SIZES.width
+        });
+    }, []);
+
     function renderContent() {
         return (
             <View className='flex-1'>
@@ -123,6 +131,7 @@ const MainLayout = () => {
                     horizontal
                     pagingEnabled
                     snapToAlignment={'center'}
+                    scrollEnabled={false}
                     snapToInterval={SIZES.width}
                     decelerationRate={'fast'}
                     showsHorizontalScrollIndicator={false}
@@ -154,13 +163,16 @@ const MainLayout = () => {
         return (
             <View
                 style={{
-                    height: 80,
-                    marginBottom: 15,
+                    height: 70,
+                    marginVertical: 15,
                     paddingHorizontal: 15,
-                    // paddingVertical: 
+                    // paddingVertical: 15
                 }}>
                 <View className='' style={{ flex: 1, backgroundColor: COLORS.primary3, borderRadius: SIZES.radius }}>
-                    <Tab scrollX={scrollX} />
+                    <Tab
+                        scrollX={scrollX}
+                        onBottomTabPress={onBottomTabPress}
+                    />
                 </View>
             </View>
         );
@@ -172,6 +184,7 @@ const MainLayout = () => {
             {renderBottomTab()}
         </View>
     );
+
 };
 
 export default MainLayout;
