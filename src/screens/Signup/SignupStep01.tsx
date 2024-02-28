@@ -1,9 +1,9 @@
 import React from 'react';
 import { Image, ImageBackground, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-const logo = require('../assets/images/logo.png');
+// const logo = require('../assets/images/logo.png');
 // import {} from ';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
-import { COLORS, SIZES, FONTS, constants, icons, images, dummyData } from '../constants';
+import { COLORS, SIZES, FONTS, constants, icons, images, dummyData } from '../../constants';
 import {
     IconButton,
     TextButton,
@@ -11,40 +11,43 @@ import {
     LineDivider,
     CategoryCard,
     HorizontalCourseCard
-} from '../components';
+} from '../../components';
 
-const Login = ({ navigation }: { navigation: any; }) => {
-    const [showPass, setShowPass] = React.useState(false);
+const SignupStep01 = ({ navigation }: { navigation: any; }) => {
+    const [userForm, setUserForm] = React.useState({
+        fullName: '',
+        email: '',
+    });
     return (
         <View className='flex-1'
             style={{
                 flex: 1,
-                backgroundColor: COLORS.primary
+                backgroundColor: COLORS.white
             }}>
             <Text className='' style={{
                 ...FONTS.h1,
                 paddingHorizontal: SIZES.padding,
                 marginTop: 90,
-                color: COLORS.white
+                color: COLORS.black
             }}>
-                Login
+                Sign Up Step 1
             </Text>
             <Text className='text-red-300' style={{
                 ...FONTS.body3,
-                color: COLORS.white,
+                color: COLORS.gray30,
                 paddingHorizontal: SIZES.padding,
                 marginTop: 10,
             }}>
-                Welcome back to WISDOM E-LEARNING
+                Welcome to WISDOM E-LEARNING
             </Text>
 
             <View
-                className={`rounded-t-[${SIZES.radius}] bg-white mt-[24] px-[20] py-[20]`}
+                className={`rounded-t-[${SIZES.radius}]  mt-[24] px-[20] py-[20]`}
                 style={{
                     flex: 1,
                     marginTop: SIZES.padding,
                     paddingHorizontal: SIZES.padding,
-                    backgroundColor: COLORS.white,
+                    backgroundColor: COLORS.primary,
                     borderTopEndRadius: SIZES.radius,
                     borderTopLeftRadius: SIZES.radius,
                     borderWidth: 1,
@@ -56,21 +59,22 @@ const Login = ({ navigation }: { navigation: any; }) => {
                         marginTop: SIZES.padding,
                         ...FONTS.body3,
                         fontSize: 18,
-                        color: COLORS.gray50,
+                        color: COLORS.white,
 
-                    }}>Email</Text>
+                    }}>Full Name</Text>
                 <View className=''
                     style={{
                         marginTop: SIZES.base,
                         borderRadius: SIZES.radius,
                         backgroundColor: COLORS.white,
                         borderWidth: 1,
-                        borderColor: COLORS.gray30
+                        borderColor: COLORS.white
                     }}>
 
                     <TextInput
                         className=''
-                        placeholder='Enter Your Email'
+                        placeholder='Enter Your Full Name'
+                        onChangeText={(value) => setUserForm({ ...userForm, fullName: value })}
                         placeholderTextColor={COLORS.gray30}
                         style={{
                             paddingHorizontal: SIZES.radius,
@@ -85,101 +89,71 @@ const Login = ({ navigation }: { navigation: any; }) => {
                         marginTop: SIZES.padding,
                         ...FONTS.body3,
                         fontSize: 18,
-                        color: COLORS.gray50
-                    }}>Password</Text>
+                        color: COLORS.white
+                    }}>Email</Text>
                 <View className=''
                     style={{
                         marginTop: SIZES.base,
                         borderRadius: SIZES.radius,
+                        backgroundColor: COLORS.white,
                         borderWidth: 1,
-                        borderColor: COLORS.gray30
+                        borderColor: COLORS.white
                     }}>
 
                     <TextInput
                         className=''
-                        placeholder='Enter Your Password'
+                        placeholder='Enter Your Email Address'
+                        onChangeText={(value) => setUserForm({ ...userForm, email: value })}
                         placeholderTextColor={COLORS.gray30}
-                        secureTextEntry={!showPass}
                         style={{
                             // backgroundColor: COLORS.gray20,
                             width: '80%',
                             paddingHorizontal: SIZES.radius,
                             height: 50,
                             fontSize: 18,
-                        }}
-                    />
-
-                    <TouchableOpacity
-                        className='absolute'
-                        style={{
-                            right: 22,
-                            // transform: [{ translateY: 30 }]
-                            top: 0,
-                            bottom: 0,
-                            justifyContent: 'center'
-                        }}
-                        onPress={() => { setShowPass(!showPass); }}>
-                        {showPass ? (
-                            <Image source={icons.eye} resizeMode='contain' style={{ width: 20, height: 20 }} />
-                        ) :
-                            <Image source={icons.eye_close} resizeMode='contain' style={{ width: 20, height: 20 }} />
-                        }
-                    </TouchableOpacity>
+                        }} />
                 </View>
 
-                <View className=''>
-                    <TouchableOpacity>
-                        <Text
-                            className={`self-end `}
-                            style={{
-                                // alignSelf: 'flex-end',
-                                color: COLORS.gray30,
-                                marginTop: SIZES.base,
-                                ...FONTS.body3,
-                                fontSize: 16
-                            }}>
-                            Forgot Password?
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+
 
                 <TextButton
-                    customContainerClassName='mt-[20]'
+                    customContainerClassName='mt-[150]'
                     customContainerStyle={{
                         height: 55,
                         borderRadius: SIZES.radius,
-                        backgroundColor: COLORS.primary,
+                        backgroundColor: COLORS.white,
                         paddingHorizontal: 10,
                     }}
                     customLabelStyle={{
                         ...FONTS.h3,
-                        fontSize: 18
+                        fontSize: 18,
+                        color: COLORS.primary
                     }}
-                    label='Login'
-                onPress={() => navigation.navigate('Dashboard')}
+                    label='Verify Email'
+                    onPress={() => navigation.navigate('SignupStep02', { userForm })}
                 />
 
                 <View className='flex-row items-center justify-center  mt-[20]'>
                     <Text
                         className='text-center'
                         style={{
-                            color: COLORS.gray30,
+                            color: COLORS.white,
                             ...FONTS.body3,
                             fontSize: 16
                         }}>
-                        Don't have an account?{'  '}
+                        Already have an account?{'  '}
                     </Text>
                     <TouchableOpacity
                         className=''
-                        onPress={() => navigation.navigate('SignupStep01')}>
+                        onPress={() => navigation.navigate('Login')}>
                         <Text
                             className='text-center underline'
                             style={{
-                                color: COLORS.primary,
-                                ...FONTS.body3,
+                                color: COLORS.white,
+                                ...FONTS.h4,
                                 fontSize: 16
                             }}>
-                            Sign up
+                            Login
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -188,4 +162,4 @@ const Login = ({ navigation }: { navigation: any; }) => {
     );
 };
 
-export default Login;
+export default SignupStep01;

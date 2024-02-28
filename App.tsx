@@ -27,6 +27,10 @@ import {
     MainLayout,
     Home,
     SplashScreen,
+    Login,
+    SignupStep01,
+    SignupStep02,
+    SignupStep03,
 } from './src/screens';
 const Stack = createStackNavigator();
 function App(): React.JSX.Element {
@@ -44,10 +48,11 @@ function App(): React.JSX.Element {
                 // initialRouteName={'Dashboard'}
             >
                 <Stack.Screen name="SplashScreen" component={SplashScreen} />
-                <Stack.Screen
-                    name="Dashboard"
-                    component={MainLayout}
-                />
+                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="SignupStep01" component={SignupStep01} />
+                <Stack.Screen name="SignupStep02" component={SignupStep02} />
+                <Stack.Screen name="SignupStep03" component={SignupStep03} />
+                <Stack.Screen name="Dashboard" component={MainLayout} />
             </Stack.Navigator>
         </NavigationContainer >
     );

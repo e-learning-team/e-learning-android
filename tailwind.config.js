@@ -24,6 +24,7 @@ module.exports = {
   content: [
     "./App.tsx",
     ...globSync('./src/**/*.tsx'),
+    ...globSync('./src/**/**/*.tsx'),
   ],
   theme: {
     extend: {},

@@ -81,6 +81,7 @@ const SplashScreen = ({ navigation }: { navigation: any; }) => {
               fontSize: 16
             }}
             label='Sign up'
+            onPress={() => navigation.navigate('SignupStep01')}
           />
           <TextButton
             customContainerClassName=''
@@ -101,6 +102,7 @@ const SplashScreen = ({ navigation }: { navigation: any; }) => {
               fontSize: 16
             }}
             label='Log in'
+            onPress={() => navigation.navigate('Login')}
           />
         </View>
 

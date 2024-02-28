@@ -1,9 +1,9 @@
 import React from 'react';
 import { Image, ImageBackground, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
-const logo = require('../assets/images/logo.png');
+// const logo = require('../assets/images/logo.png');
 // import {} from ';
 import { FlatList, TextInput } from 'react-native-gesture-handler';
-import { COLORS, SIZES, FONTS, constants, icons, images, dummyData } from '../constants';
+import { COLORS, SIZES, FONTS, constants, icons, images, dummyData } from '../../constants';
 import {
     IconButton,
     TextButton,
@@ -11,40 +11,43 @@ import {
     LineDivider,
     CategoryCard,
     HorizontalCourseCard
-} from '../components';
+} from '../../components';
 
-const Login = ({ navigation }: { navigation: any; }) => {
+const SignupStep03 = ({ navigation, route }: { navigation: any; route: any; }) => {
     const [showPass, setShowPass] = React.useState(false);
+    const [userForm, setUserForm] = React.useState({ ...route.params?.userForm, password: '' });
+    // console.log('route.params', route.params?.userForm)
+
     return (
         <View className='flex-1'
             style={{
                 flex: 1,
-                backgroundColor: COLORS.primary
+                backgroundColor: COLORS.white
             }}>
             <Text className='' style={{
                 ...FONTS.h1,
                 paddingHorizontal: SIZES.padding,
                 marginTop: 90,
-                color: COLORS.white
+                color: COLORS.black
             }}>
-                Login
+                Sign Up Step 3
             </Text>
             <Text className='text-red-300' style={{
                 ...FONTS.body3,
-                color: COLORS.white,
+                color: COLORS.gray30,
                 paddingHorizontal: SIZES.padding,
                 marginTop: 10,
             }}>
-                Welcome back to WISDOM E-LEARNING
+                Create your Password
             </Text>
 
             <View
-                className={`rounded-t-[${SIZES.radius}] bg-white mt-[24] px-[20] py-[20]`}
+                className={`rounded-t-[${SIZES.radius}]  mt-[24] px-[20] py-[20]`}
                 style={{
                     flex: 1,
                     marginTop: SIZES.padding,
                     paddingHorizontal: SIZES.padding,
-                    backgroundColor: COLORS.white,
+                    backgroundColor: COLORS.primary,
                     borderTopEndRadius: SIZES.radius,
                     borderTopLeftRadius: SIZES.radius,
                     borderWidth: 1,
@@ -56,46 +59,51 @@ const Login = ({ navigation }: { navigation: any; }) => {
                         marginTop: SIZES.padding,
                         ...FONTS.body3,
                         fontSize: 18,
-                        color: COLORS.gray50,
+                        color: COLORS.white,
 
-                    }}>Email</Text>
-                <View className=''
-                    style={{
-                        marginTop: SIZES.base,
-                        borderRadius: SIZES.radius,
-                        backgroundColor: COLORS.white,
-                        borderWidth: 1,
-                        borderColor: COLORS.gray30
                     }}>
-
-                    <TextInput
-                        className=''
-                        placeholder='Enter Your Email'
-                        placeholderTextColor={COLORS.gray30}
+                    Hello{' '}
+                    <Text className=''
                         style={{
-                            paddingHorizontal: SIZES.radius,
-                            height: 50,
+                            ...FONTS.h2,
+                            textDecorationLine: 'underline',
                             fontSize: 18,
-                        }}
-                    />
-                </View>
+                            color: COLORS.white
+                        }}>{"{content?.fullName} jasd"}</Text>
+                </Text>
+                <Text className=''
+                    style={{
+                        ...FONTS.body3,
+                        fontSize: 18,
+                        color: COLORS.white,
+
+                    }}>
+                    <Text className=''
+                        style={{
+                            ...FONTS.body4,
+                            fontSize: 18,
+                            color: COLORS.white
+                        }}>{"Congrats! Now enter your password to continue"}</Text>
+                </Text>
 
                 <Text className=''
                     style={{
                         marginTop: SIZES.padding,
                         ...FONTS.body3,
                         fontSize: 18,
-                        color: COLORS.gray50
+                        color: COLORS.white
                     }}>Password</Text>
                 <View className=''
                     style={{
                         marginTop: SIZES.base,
                         borderRadius: SIZES.radius,
+                        backgroundColor: COLORS.white,
                         borderWidth: 1,
-                        borderColor: COLORS.gray30
+                        borderColor: COLORS.white
                     }}>
 
                     <TextInput
+                        onChangeText={(value) => setUserForm({ ...userForm, password: value })}
                         className=''
                         placeholder='Enter Your Password'
                         placeholderTextColor={COLORS.gray30}
@@ -127,59 +135,51 @@ const Login = ({ navigation }: { navigation: any; }) => {
                     </TouchableOpacity>
                 </View>
 
-                <View className=''>
-                    <TouchableOpacity>
-                        <Text
-                            className={`self-end `}
-                            style={{
-                                // alignSelf: 'flex-end',
-                                color: COLORS.gray30,
-                                marginTop: SIZES.base,
-                                ...FONTS.body3,
-                                fontSize: 16
-                            }}>
-                            Forgot Password?
-                        </Text>
-                    </TouchableOpacity>
-                </View>
+
 
                 <TextButton
-                    customContainerClassName='mt-[20]'
+                    customContainerClassName='mt-[80]'
                     customContainerStyle={{
                         height: 55,
                         borderRadius: SIZES.radius,
-                        backgroundColor: COLORS.primary,
+                        backgroundColor: COLORS.white,
                         paddingHorizontal: 10,
                     }}
                     customLabelStyle={{
                         ...FONTS.h3,
-                        fontSize: 18
+                        fontSize: 18,
+                        color: COLORS.primary
                     }}
-                    label='Login'
-                onPress={() => navigation.navigate('Dashboard')}
+                    label='Sign Up'
+                    onPress={() => {
+                        console.log('userForm', userForm);
+                        navigation.navigate('Dashboard');
+                    }}
                 />
 
                 <View className='flex-row items-center justify-center  mt-[20]'>
                     <Text
                         className='text-center'
                         style={{
-                            color: COLORS.gray30,
+                            color: COLORS.white,
                             ...FONTS.body3,
                             fontSize: 16
                         }}>
-                        Don't have an account?{'  '}
+                        Already have an account?{'  '}
                     </Text>
                     <TouchableOpacity
                         className=''
-                        onPress={() => navigation.navigate('SignupStep01')}>
+                        onPress={() => {
+                            navigation.navigate('Login');
+                        }}>
                         <Text
                             className='text-center underline'
                             style={{
-                                color: COLORS.primary,
-                                ...FONTS.body3,
+                                color: COLORS.white,
+                                ...FONTS.h4,
                                 fontSize: 16
                             }}>
-                            Sign up
+                            Login
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -188,4 +188,4 @@ const Login = ({ navigation }: { navigation: any; }) => {
     );
 };
 
-export default Login;
+export default SignupStep03;
