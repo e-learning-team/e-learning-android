@@ -1,19 +1,23 @@
 import React from 'react';
-import { Image, ImageBackground, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
 const logo = require('../assets/images/logo.png');
 // import {} from ';
-import { FlatList, TextInput } from 'react-native-gesture-handler';
-import { COLORS, SIZES, FONTS, constants, icons, images, dummyData } from '../constants';
+import { TextInput } from 'react-native-gesture-handler';
+import { COLORS, SIZES, FONTS, icons } from '../constants';
 import {
-    IconButton,
-    TextButton,
-    VerticalCourseCard,
-    LineDivider,
-    CategoryCard,
-    HorizontalCourseCard
-} from '../components';
+    TextButton} from '../components';
+import { UserLoginData } from '../models/UserLoginData';
 
+import Realm from 'realm';
 const Login = ({ navigation }: { navigation: any; }) => {
+    
+    async function realm () {
+        return await Realm.open({
+            path: 'myrealm',
+            schema: [UserLoginData],
+        });
+    }
+    console.log('realm', realm);
     const [showPass, setShowPass] = React.useState(false);
     return (
         <View className='flex-1'

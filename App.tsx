@@ -32,6 +32,10 @@ import {
     SignupStep02,
     SignupStep03,
 } from './src/screens';
+import { RealmProvider } from '@realm/react';
+
+// Import your models
+import { UserLoginData } from './src/models/UserLoginData';
 const Stack = createStackNavigator();
 function App(): React.JSX.Element {
     return (
@@ -40,21 +44,23 @@ function App(): React.JSX.Element {
         //     <Stack.Screen name="Home" component={Home} />
         //   </Stack.Navigator>
         // </NavigationContainer>
-        <NavigationContainer>
-            <Stack.Navigator
-                screenOptions={{
-                    headerShown: false
-                }}
+        <RealmProvider schema={[UserLoginData]}>
+            <NavigationContainer>
+                <Stack.Navigator
+                    screenOptions={{
+                        headerShown: false
+                    }}
                 // initialRouteName={'Dashboard'}
-            >
-                <Stack.Screen name="SplashScreen" component={SplashScreen} />
-                <Stack.Screen name="Login" component={Login} />
-                <Stack.Screen name="SignupStep01" component={SignupStep01} />
-                <Stack.Screen name="SignupStep02" component={SignupStep02} />
-                <Stack.Screen name="SignupStep03" component={SignupStep03} />
-                <Stack.Screen name="Dashboard" component={MainLayout} />
-            </Stack.Navigator>
-        </NavigationContainer >
+                >
+                    <Stack.Screen name="SplashScreen" component={SplashScreen} />
+                    <Stack.Screen name="Login" component={Login} />
+                    <Stack.Screen name="SignupStep01" component={SignupStep01} />
+                    <Stack.Screen name="SignupStep02" component={SignupStep02} />
+                    <Stack.Screen name="SignupStep03" component={SignupStep03} />
+                    <Stack.Screen name="Dashboard" component={MainLayout} />
+                </Stack.Navigator>
+            </NavigationContainer >
+        </RealmProvider>
     );
 }
 export default App;
