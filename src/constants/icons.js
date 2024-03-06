@@ -25,7 +25,7 @@ const filter = require("../assets/icons/filter.png")
 const google = require("../assets/icons/google.png")
 const heart = require("../assets/icons/heart.png")
 const heart_off = require("../assets/icons/heart_off.png")
-const home = require("../assets/icons/home.png")
+// const home = require("../assets/icons/home.png")
 const illustration = require("../assets/icons/illustration.png")
 const lock = require("../assets/icons/lock.png")
 const media = require("../assets/icons/media.png")
@@ -39,19 +39,31 @@ const original = require("../assets/icons/original.png")
 const password = require("../assets/icons/password.png")
 const play = require("../assets/icons/play.png")
 const play_1 = require("../assets/icons/play_1.png")
-const profile = require("../assets/icons/profile.png")
+// const profile = require("../assets/icons/profile.png")
 const reminder = require("../assets/icons/reminder.png")
 const reply = require("../assets/icons/reply.png")
 const right_arrow = require("../assets/icons/right_arrow.png")
 const search = require("../assets/icons/search.png")
-const send = require("../assets/icons/send.png")
+// const send = require("../assets/icons/send.png")
 const staff_pick = require("../assets/icons/staff_pick.png")
 const star = require("../assets/icons/star.png")
 const star_1 = require("../assets/icons/star_1.png")
 const sun = require("../assets/icons/sun.png")
 const time = require("../assets/icons/time.png")
 const web_design = require("../assets/icons/web_design.png")
-
+const briefcase = require("../assets/icons/briefcase.png")
+const close = require("../assets/icons/close.png")
+const home = require("../assets/icons/home.png")
+const market = require("../assets/icons/market.png")
+const profile = require("../assets/icons/profile.png")
+const rightArrow = require("../assets/icons/right-arrow.png")
+const send = require("../assets/icons/send.png")
+const trade = require("../assets/icons/trade.png")
+const upArrow = require("../assets/icons/up-arrow.png")
+const verified = require("../assets/icons/verified.png")
+const withdraw = require("../assets/icons/withdraw.png")
+const piechart = require("../assets/icons/piechart.png")
+const error = require("../assets/icons/error.png")
 export default {
     all,
     animation,
@@ -79,7 +91,6 @@ export default {
     google,
     heart,
     heart_off,
-    home,
     illustration,
     lock,
     media,
@@ -93,16 +104,27 @@ export default {
     password,
     play,
     play_1,
-    profile,
     reminder,
     reply,
     right_arrow,
     search,
-    send,
     staff_pick,
     star,
     star_1,
     sun,
     time,
-    web_design
+    web_design,
+    briefcase,
+    close,
+    home,
+    market,
+    profile,
+    rightArrow,
+    send,
+    trade,
+    upArrow,
+    verified,
+    withdraw,
+    piechart,
+    error
 }

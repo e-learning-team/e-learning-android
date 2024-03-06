@@ -7,181 +7,68 @@ import {
     TouchableOpacity
 } from 'react-native';
 
-import { COLORS, SIZES, FONTS, constants } from '../constants';
+import { COLORS, SIZES, FONTS, constants, icons } from '../constants';
 import Home from './Home';
-import Search from './Search';
-import Profile from './Profile';
+import { LineDivider } from '../components';
+import { IconButton } from '../components';
 
-const bottom_tabs = constants.bottom_tabs.map((tab) => ({
-    ...tab,
-    ref: React.createRef<any>()
-}));
-const TabIndicator = ({ measureLayout, scrollX }: any) => {
-    const inputRange = bottom_tabs.map((_, index) => index * SIZES.width);
-    const tabIndicatorWidth = scrollX.interpolate({
-        inputRange,
-        outputRange: measureLayout.map((measure: any) => measure.width)
-    });
-    const translateX = scrollX.interpolate({
-        inputRange,
-        outputRange: measureLayout.map((measure: any) => measure.x)
-    });
+
+const MainLayout = ({ children, tabs }: any) => {
+
+
+
     return (
-        <Animated.View className={``}
-            style={{
-                width: tabIndicatorWidth,
-                backgroundColor: COLORS.primary,
-                borderRadius: SIZES.radius,
-                position: 'absolute',
-                left: 0,
-                height: '100%',
-                transform: [{
-                    translateX
-                }]
-            }}>
-
-        </Animated.View>
-    );
-};
-const Tab = ({ scrollX, onBottomTabPress }: any) => {
-    const [measures, setMeasures] = useState<{ x: number; y: number; width: number; height: number; }[]>([]);
-    const containerRef = useRef<View>(null);
-
-    React.useEffect(() => {
-        const ml: { x: number; y: number; width: number; height: number; }[] = [];
-
-        bottom_tabs.forEach((item) => {
-            item.ref.current.measureLayout(
-                containerRef.current,
-                (x: number, y: number, width: number, height: number) => {
-                    ml.push({ x, y, width, height });
-                    if (ml.length === bottom_tabs.length) {
-                        setMeasures(ml);
-                    }
-                }
-            );
-        });
-        // console.log('measures', measures.length);
-    }, [containerRef.current]);
-    return (
-        <View className='flex-row justify-between items-center'
-            ref={containerRef as any}
-            style={{
-                flex: 1,
-                flexDirection: 'row',
-
-            }}
-        >
-
-            {measures.length > 0 ? <TabIndicator measureLayout={measures} scrollX={scrollX} /> : null}
-
-            {bottom_tabs.map((item, index) => {
-                return (
-                    <TouchableOpacity
-                        className=''
-                        key={`Bottom-${index}`}
-                        ref={item.ref}
-                        style={{
-                            flex: 1,
-                            alignItems: 'center',
-                            paddingHorizontal: 15,
-                            justifyContent: 'center'
-                        }}
-                        onPress={() => onBottomTabPress(index)}
-                    >
-                        <Image
-                            source={item.icon}
-                            resizeMode='contain'
-                            style={{
-                                width: 25,
-                                height: 25,
-                            }}
-                        />
-                        <Text className='text-white font-semibold'
-                            style={{
-                                marginTop: 4,
-                                height: 25,
-                                // color: COLORS.white,
-                                ...FONTS.h4
-                            }}>
-                            {item.label}
-                        </Text>
-                    </TouchableOpacity>
-                );
-            })}
-        </View>
-    );
-};
-const MainLayout = () => {
-
-    const flatListRef = React.useRef<Animated.FlatList>(null);
-    const scrollX = React.useRef(new Animated.Value(0)).current;
-
-    const onBottomTabPress = React.useCallback((bottomTabIndex: any) => {
-        flatListRef?.current?.scrollToOffset({
-            offset: bottomTabIndex * SIZES.width
-        });
-    }, []);
-
-    function renderContent() {
-        return (
-            <View className='flex-1'>
-                <Animated.FlatList
-                    ref={flatListRef}
-                    horizontal
-                    pagingEnabled
-                    snapToAlignment={'center'}
-                    scrollEnabled={false}
-                    snapToInterval={SIZES.width}
-                    decelerationRate={'fast'}
-                    showsHorizontalScrollIndicator={false}
-                    data={constants.bottom_tabs}
-                    keyExtractor={item => `Main-${item.id}`}
-                    onScroll={
-                        Animated.event([
-                            { nativeEvent: { contentOffset: { x: scrollX } } }
-                        ], { useNativeDriver: false })
-                    }
-                    renderItem={({ item, index }) => {
-                        return (
-                            <View style={{
-                                height: SIZES.height,
-                                width: SIZES.width
-                            }}>
-                                {item.label == constants.screens.home ? <Home /> : null}
-                                {item.label == constants.screens.search ? <Search /> : null}
-                                {item.label == constants.screens.profile ? <Profile /> : null}
-                            </View>
-                        );
-                    }}
-                />
-            </View>
-        );
-    }
-
-    function renderBottomTab() {
-        return (
-            <View
-                style={{
-                    height: 70,
-                    marginVertical: 15,
-                    paddingHorizontal: 15,
-                    // paddingVertical: 15
+        <View className='flex-1 '>
+            {/* <Text>Main</Text> */}
+            <View className='w-full items-center justify-between flex-row h-[80] bg-gray-200'>
+                <Text className='mx-[15]' style={{
+                    ...FONTS.h2,
+                    color: COLORS.black
                 }}>
-                <View className='' style={{ flex: 1, backgroundColor: COLORS.primary3, borderRadius: SIZES.radius }}>
-                    <Tab
-                        scrollX={scrollX}
-                        onBottomTabPress={onBottomTabPress}
+                    {tabs === 'Home' ? 'Crypto' : ''}
+                </Text>
+
+                <View className='flex-row'>
+                    <IconButton
+                        icon={icons.search}
+                        containerStyle={{
+                            // backgroundColor: COLORS.primary,
+                            width: 50,
+                            height: 50,
+                            borderRadius: 50 / 2,
+                            backgroundColor: COLORS.gray10,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            borderColor: COLORS.primary,
+                            borderWidth: 1
+                        }}
+                        iconStyle={{
+                            width: 20,
+                            height: 20,
+                            tintColor: COLORS.primary,
+                        }}
+                    // onPress={() => navigation.goBack()}
+                    />
+                    <IconButton
+                        icon={icons.profile}
+                        containerStyle={{
+                            marginHorizontal: SIZES.padding,
+                            width: 50,
+                            height: 50,
+                            borderRadius: 50 / 2,
+                            backgroundColor: COLORS.primary2,
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                        }}
+                        iconStyle={{
+                            tintColor: COLORS.primary,
+                        }}
+                    // onPress={() => navigation.goBack()}
                     />
                 </View>
             </View>
-        );
-    }
-
-    return (
-        <View className='flex-1 bg-white'>
-            {renderContent()}
-            {renderBottomTab()}
+            <LineDivider />
+            {children}
         </View>
     );
 
