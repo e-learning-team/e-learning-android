@@ -69,7 +69,7 @@ const SignupStep03 = ({ navigation, route }: { navigation: any; route: any; }) =
                             textDecorationLine: 'underline',
                             fontSize: 18,
                             color: COLORS.white
-                        }}>{"{content?.fullName} jasd"}</Text>
+                        }}>{route.params?.userForm.fullName}</Text>
                 </Text>
                 <Text className=''
                     style={{

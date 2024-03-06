@@ -6,18 +6,18 @@ import { TextInput } from 'react-native-gesture-handler';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 import {
     TextButton} from '../components';
-import { UserLoginData } from '../models/UserLoginData';
+// import { UserLoginData } from '../models/UserLoginData';
 
-import Realm from 'realm';
+// import Realm from 'realm';
 const Login = ({ navigation }: { navigation: any; }) => {
     
-    async function realm () {
-        return await Realm.open({
-            path: 'myrealm',
-            schema: [UserLoginData],
-        });
-    }
-    console.log('realm', realm);
+    // async function realm () {
+    //     return await Realm.open({
+    //         path: 'myrealm',
+    //         schema: [UserLoginData],
+    //     });
+    // }
+    // console.log('realm', realm);
     const [showPass, setShowPass] = React.useState(false);
     return (
         <View className='flex-1'

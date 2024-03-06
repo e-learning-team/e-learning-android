@@ -32,10 +32,10 @@ import {
     SignupStep02,
     SignupStep03,
 } from './src/screens';
-import { RealmProvider } from '@realm/react';
+// import { RealmProvider } from '@realm/react';
 
 // Import your models
-import { UserLoginData } from './src/models/UserLoginData';
+// import { UserLoginData } from './src/models/UserLoginData';
 const Stack = createStackNavigator();
 function App(): React.JSX.Element {
     return (
@@ -44,7 +44,7 @@ function App(): React.JSX.Element {
         //     <Stack.Screen name="Home" component={Home} />
         //   </Stack.Navigator>
         // </NavigationContainer>
-        <RealmProvider schema={[UserLoginData]}>
+        // <RealmProvider schema={[UserLoginData]}>
             <NavigationContainer>
                 <Stack.Navigator
                     screenOptions={{
@@ -60,7 +60,7 @@ function App(): React.JSX.Element {
                     <Stack.Screen name="Dashboard" component={MainLayout} />
                 </Stack.Navigator>
             </NavigationContainer >
-        </RealmProvider>
+        // </RealmProvider>
     );
 }
 export default App;
