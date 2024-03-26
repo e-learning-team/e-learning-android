@@ -64,6 +64,7 @@ const verified = require("../assets/icons/verified.png")
 const withdraw = require("../assets/icons/withdraw.png")
 const piechart = require("../assets/icons/piechart.png")
 const error = require("../assets/icons/error.png")
+const edit = require("../assets/icons/edit.png")
 export default {
     all,
     animation,
@@ -126,5 +127,6 @@ export default {
     verified,
     withdraw,
     piechart,
-    error
+    error,
+    edit
 }

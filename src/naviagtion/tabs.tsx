@@ -16,12 +16,13 @@ const Tabs = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
+                removeClippedSubviews : true,
                 headerShown: false,
                 tabBarStyle: {
-                    backgroundColor: COLORS.primary,
-                    borderTopColor: "transparent",
+                    backgroundColor: COLORS.primary3,
+                    borderTopColor: "white",
                     height: 70,
-                    
+                    borderTopWidth: 2,
                 },
                 tabBarLabelStyle: {
                     marginBottom: 10,
@@ -38,7 +39,9 @@ const Tabs = () => {
         >
             <Tab.Screen
                 name="Home"
+
                 options={{
+                    unmountOnBlur: true,
                     tabBarIcon: ({ focused }) => (
                         <TabIcon 
                             focused={focused}
@@ -53,6 +56,7 @@ const Tabs = () => {
             <Tab.Screen
                 name="Search"
                 options={{
+                    unmountOnBlur: true,
                     tabBarIcon: ({ focused }) => (
                         <TabIcon 
                             focused={focused}
@@ -77,6 +81,7 @@ const Tabs = () => {
             <Tab.Screen
                 name="Profile"
                 options={{
+                    unmountOnBlur: true,
                     tabBarIcon: ({ focused }) => (
                         <TabIcon 
                             focused={focused}

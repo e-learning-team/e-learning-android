@@ -10,8 +10,16 @@ import {
   theme
 } from '../constants';
 import { TextButton } from '../components';
+import { UserLoginData, useObject, useQuery, useRealm } from '../models/UserLoginData';
 const SplashScreen = ({ navigation }: { navigation: any; }) => {
-
+  const realm = useRealm();
+  const userData = useQuery(UserLoginData);
+  useEffect(() => {
+    if(userData?.at(0)){
+      // console.log("----User login 1 ", userData.at(0)?.email);
+      navigation.navigate('Dashboard');
+    }
+  }, [])
   return (
     <SafeAreaView className='bg-white h-full w-full items-center' style={{}}>
       <Image

@@ -11,14 +11,16 @@ import { COLORS, SIZES, FONTS } from '../constants';
 const CategoryCard = ({ containerStyle, category, onPress }: any) => {
     return(
         <TouchableOpacity>
-            <ImageBackground
-                source={category?.thumbnail}
-                resizeMode="cover"
+            <View
+                // source={category?.thumbnail ? category?.thumbnail : null}
+                // resizeMode="cover"
                 style={{
                     height: 150,
                     width: 200,
+                    borderRadius: SIZES.radius,
                     paddingVertical: SIZES.padding,
                     paddingHorizontal: SIZES.radius,
+                    backgroundColor: COLORS.primary2,
                     justifyContent: 'flex-end',
                     ...containerStyle
                 }}
@@ -31,7 +33,7 @@ const CategoryCard = ({ containerStyle, category, onPress }: any) => {
                     }}>
                         {category?.title}
                 </Text>
-            </ImageBackground>
+            </View>
         </TouchableOpacity>
     )
 }

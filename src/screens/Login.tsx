@@ -1,26 +1,75 @@
-import React from 'react';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, Image, Text, ToastAndroid, TouchableOpacity, View } from 'react-native';
 const logo = require('../assets/images/logo.png');
 // import {} from ';
 import { TextInput } from 'react-native-gesture-handler';
 import { COLORS, SIZES, FONTS, icons } from '../constants';
 import {
-    TextButton} from '../components';
-// import { UserLoginData } from '../models/UserLoginData';
-
-// import Realm from 'realm';
+    TextButton
+} from '../components';
+import { UserLoginData, useQuery, useRealm } from '../models/UserLoginData';
+import { BSON } from 'realm';
+import { apiLogin } from '../apis/user';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { deleteAll, saveToken, saveUser } from '../storage/AsyncStorage';
 const Login = ({ navigation }: { navigation: any; }) => {
-    
-    // async function realm () {
-    //     return await Realm.open({
-    //         path: 'myrealm',
-    //         schema: [UserLoginData],
-    //     });
-    // }
-    // console.log('realm', realm);
+    const [loading, setLoading] = useState(false);
     const [showPass, setShowPass] = React.useState(false);
+    const [payload, setPayload] = useState({
+        email: '',
+        password: ''
+    })
+    const realm = useRealm();
+    const userData = useQuery(UserLoginData);
+    const deleteAllUserData = () => {
+        realm.write(() => {
+            realm.deleteAll();
+        });
+    };
+
+    async function login() {
+        console.log('call api login');
+        setLoading(true);
+        const res = await apiLogin(payload);
+        if (res?.status == 1) {
+            deleteAll();
+            console.log('login success', res.data?.user);
+            addLoginUser(res.data?.user.email, res.data?.user.full_name, payload.password);
+            saveUser(res.data?.user);
+            saveToken(res.data?.token, res.data?.refreshToken, res.data?.user.roles);
+            
+            navigation.navigate('Dashboard')
+            ToastAndroid.showWithGravityAndOffset(
+                'Login success!',
+                ToastAndroid.SHORT,
+                ToastAndroid.TOP,
+                100,
+                200
+            )
+        } else {
+            Alert.alert('Error', 'Login failed! Please try again.', [{ text: 'OK' }]);
+        }
+        setLoading(false);
+    }
+    function addLoginUser(email: string, fullName: string, password: string) {
+        deleteAllUserData();
+
+        realm.write(() => {
+            const collection = realm.create<UserLoginData>('UserData', {
+                email: email,
+                fullName: fullName,
+                password: password,
+            })
+            // console.log("----User login 2 ", collection.email);
+            // console.log("----User login 2", collection);
+        })
+
+        // console.log("----User login 3 ", userData);
+
+
+    }
     return (
-        <View className='flex-1'
+        <View className='flex-1 relative'
             style={{
                 flex: 1,
                 backgroundColor: COLORS.primary
@@ -81,6 +130,7 @@ const Login = ({ navigation }: { navigation: any; }) => {
                             height: 50,
                             fontSize: 18,
                         }}
+                        onChangeText={(value) => setPayload({ ...payload, email: value })}
                     />
                 </View>
 
@@ -111,6 +161,7 @@ const Login = ({ navigation }: { navigation: any; }) => {
                             height: 50,
                             fontSize: 18,
                         }}
+                        onChangeText={(value) => setPayload({ ...payload, password: value })}
                     />
 
                     <TouchableOpacity
@@ -132,7 +183,8 @@ const Login = ({ navigation }: { navigation: any; }) => {
                 </View>
 
                 <View className=''>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate('ForgetPasswordStep01')}>
                         <Text
                             className={`self-end `}
                             style={{
@@ -160,7 +212,7 @@ const Login = ({ navigation }: { navigation: any; }) => {
                         fontSize: 18
                     }}
                     label='Login'
-                onPress={() => navigation.navigate('Dashboard')}
+                    onPress={() => { if (loading) return; login(); }}
                 />
 
                 <View className='flex-row items-center justify-center  mt-[20]'>
@@ -188,7 +240,13 @@ const Login = ({ navigation }: { navigation: any; }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-        </View>
+
+            <Spinner
+                visible={loading}
+                textContent={'Loading...'}
+                overlayColor='rgba(0, 0, 0, 0.5)'
+                textStyle={{ color: COLORS.white }} />
+        </View >
     );
 };
 
