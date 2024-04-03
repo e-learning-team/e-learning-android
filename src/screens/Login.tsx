@@ -38,7 +38,10 @@ const Login = ({ navigation }: { navigation: any; }) => {
             saveUser(res.data?.user);
             saveToken(res.data?.token, res.data?.refreshToken, res.data?.user.roles);
             
-            navigation.navigate('Dashboard')
+            // navigation.navigate('Dashboard')
+            navigation.reset({
+                routes: [{ name: 'Dashboard' }],
+            })
             ToastAndroid.showWithGravityAndOffset(
                 'Login success!',
                 ToastAndroid.SHORT,

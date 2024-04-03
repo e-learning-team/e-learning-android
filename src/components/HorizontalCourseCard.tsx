@@ -10,15 +10,17 @@ import IconLabel from './IconLabel';
 import { COLORS, SIZES, FONTS, constants, icons, images } from '../constants';
 import { extractVideoGoogleGDriveUrlId, getVideoThumbnailGoogleGDriveUrl } from '../utils/helper';
 
-const HorizontalCourseCard = ({ containerStyle, course, onPress }: any) => {
+const HorizontalCourseCard = ({ containerStyle, course, onPress, navigation }: any) => {
     return (
         <TouchableOpacity
+            onPress={()=>{navigation.navigate('CourseDetail', {course: course})}}
             className='flex-row'
             style={{
                 ...containerStyle
             }}>
             <ImageBackground
-                source={course.video_path ? { uri: getVideoThumbnailGoogleGDriveUrl(extractVideoGoogleGDriveUrlId(course.video_path)) } : images.featured_bg_image}
+                // source={course.video_path ? { uri: getVideoThumbnailGoogleGDriveUrl(extractVideoGoogleGDriveUrlId(course.video_path)) } : images.featured_bg_image}
+                source={course.image_path ? { uri: course.image_path } : images.featured_bg_image}
                 resizeMode='cover'
                 style={{
                     width: 130,
@@ -73,38 +75,21 @@ const HorizontalCourseCard = ({ containerStyle, course, onPress }: any) => {
                         By {course?.created_user_info[course.created_by]}
                     </Text>
 
-                    {/* <IconLabel
-                        icon={icons.time}
-                        label={course.total_lesson + ' lessons'}
-                        containerStyle={{
-                            flex: 1,
-                            marginLeft: SIZES.base,
-                        }}
-                        iconStyle={{
-                            width: 15,
-                            height: 15
-                        }}
-                        lableStyle={{
-                            ...FONTS.body4
-                        }} /> */}
-
                 </View>
                 <View className='flex-row items-center'>
                     <IconLabel
-                        icon={icons.education}
-                        label={course.subscriptions + ' students'}
+                        icon={icons.users}
+                        label={(course.subscriptions ?? 0) + (course.subscriptions > 1 ? ' students' : ' student')}
                         containerStyle={{
                             flex: 1,
-                            // marginLeft: SIZES.base,
                         }}
                         iconStyle={{
                             width: 15,
                             height: 15,
-                            tintColor: COLORS.black
+                            tintColor: COLORS.gray70
                         }}
                         lableStyle={{
                             ...FONTS.body4,
-                            // color: COLORS.black
                         }} />
                 </View>
                 <View

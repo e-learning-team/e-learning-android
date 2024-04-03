@@ -13,11 +13,11 @@ const LineDivider = ({ lineStyle, LineClassName }: any) => {
             className={` ${lineStyle}`}
             style={{
                 height: 2,
-                width:'100%',
+                width: '100%',
                 backgroundColor: COLORS.gray20,
                 ...lineStyle
             }}>
-            
+
         </View>
     )
 }

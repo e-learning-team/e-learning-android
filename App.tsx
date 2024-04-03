@@ -21,6 +21,7 @@ import {
     ForgetPasswordStep03,
     Profile,
     Search,
+    CourseDetail,
 } from './src/screens';
 import Tabs from './src/naviagtion/tabs';
 import { Text, View } from 'react-native';
@@ -45,7 +46,7 @@ function App(): React.JSX.Element {
                         initialRouteName={'SplashScreen'}
                     >
                         <Stack.Screen name="SplashScreen" component={SplashScreen} />
-                        <Stack.Screen name="Login" component={Login} />
+                        <Stack.Screen  name="Login" component={Login} />
 
                         <Stack.Screen name="SignupStep01" component={SignupStep01} />
                         <Stack.Screen name="SignupStep02" component={SignupStep02} />
@@ -60,6 +61,7 @@ function App(): React.JSX.Element {
                         
                         <Stack.Screen name="Home" component={Home} />
                         <Stack.Screen name="Search" component={Search} />
+                        <Stack.Screen name="CourseDetail" component={CourseDetail} />
                         <Stack.Screen name="Profile" component={Profile} />
 
                     </Stack.Navigator>

@@ -65,6 +65,10 @@ const withdraw = require("../assets/icons/withdraw.png")
 const piechart = require("../assets/icons/piechart.png")
 const error = require("../assets/icons/error.png")
 const edit = require("../assets/icons/edit.png")
+const last_update = require("../assets/icons/last_update.png")
+const users = require("../assets/icons/users.png")
+const chevron_down = require("../assets/icons/chevron_down.png")
+const chevron_up = require("../assets/icons/chevron_up.png")
 export default {
     all,
     animation,
@@ -128,5 +132,9 @@ export default {
     withdraw,
     piechart,
     error,
-    edit
+    edit,
+    last_update,
+    users,
+    chevron_down,
+    chevron_up
 }

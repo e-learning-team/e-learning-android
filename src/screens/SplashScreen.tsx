@@ -17,7 +17,10 @@ const SplashScreen = ({ navigation }: { navigation: any; }) => {
   useEffect(() => {
     if(userData?.at(0)){
       // console.log("----User login 1 ", userData.at(0)?.email);
-      navigation.navigate('Dashboard');
+      navigation.reset({
+        // index: 0,
+        routes: [{ name: 'Dashboard' }],
+      });
     }
   }, [])
   return (

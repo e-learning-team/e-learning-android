@@ -9,11 +9,10 @@ import {
 import { COLORS, SIZES, FONTS } from '../constants';
 
 const CategoryCard = ({ containerStyle, category, onPress }: any) => {
-    return(
-        <TouchableOpacity>
+    return (
+        <TouchableOpacity
+            onPress={onPress}>
             <View
-                // source={category?.thumbnail ? category?.thumbnail : null}
-                // resizeMode="cover"
                 style={{
                     height: 150,
                     width: 200,
@@ -24,14 +23,14 @@ const CategoryCard = ({ containerStyle, category, onPress }: any) => {
                     justifyContent: 'flex-end',
                     ...containerStyle
                 }}
-                >
+            >
                 <Text
                     className=""
                     style={{
                         color: COLORS.white,
                         ...FONTS.h2
                     }}>
-                        {category?.title}
+                    {category?.title}
                 </Text>
             </View>
         </TouchableOpacity>

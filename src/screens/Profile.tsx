@@ -14,13 +14,14 @@ import {
     TouchableWithoutFeedback,
 } from 'react-native';
 import { useRealm } from '../models/UserLoginData';
-import { deleteUser, getAccessToken, getUser, saveUser } from '../storage/AsyncStorage';
+import { deleteToken, deleteUser, getAccessToken, getUser, saveUser } from '../storage/AsyncStorage';
 import { COLORS, SIZES, FONTS, images, icons } from '../constants';
 import { LineDivider, TextButton } from '../components';
 import { apiProfileUpdate, apiProfileUpdateAddress, apiProfileUpdateFullName, apiProfileUpdatePassword, apiProfileUpdatePhoneNumber, apiUserDetail } from '../apis/user';
 import Spinner from 'react-native-loading-spinner-overlay';
+
 // import Overlay from 'react-native-modal-overlay';
-const ProfileItem = ({ icon, lable, value, onPress, type, isChanged }: { icon?: any; lable?: string; value?: any; onPress?: any; type?: any; isChanged?: any }) => {
+const ProfileItem = ({ icon, lable, value, onPress, type, isChanged, hasJWT_Error }: { icon?: any; lable?: string; value?: any; onPress?: any; type?: any; isChanged?: any, hasJWT_Error?: any }) => {
     const [showModal, setShowModal] = React.useState(false);
     const [onChange, setOnChange] = React.useState(false);
     const modalRef = useRef(null);
@@ -31,6 +32,7 @@ const ProfileItem = ({ icon, lable, value, onPress, type, isChanged }: { icon?: 
     const [showConfirmPass, setShowConfirmPass] = React.useState(false);
     const [resetPasswordForm, setResetPasswordForm] = React.useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
     const [errorMessage, setErrorMessage] = React.useState({ currentPasswordError: '', newPasswordError: '', confirmPasswordError: '' });
+    const [apiError, setApiError] = React.useState(false);
     const validatePassword = () => {
         let isValid = true;
         if (resetPasswordForm.currentPassword.length < 8) {
@@ -74,16 +76,22 @@ const ProfileItem = ({ icon, lable, value, onPress, type, isChanged }: { icon?: 
     const handlePasswordChange = async () => {
         if (validatePassword()) {
             console.log('resetPasswordForm', resetPasswordForm);
-            try{
-                const res = await apiProfileUpdatePassword(value?.id, resetPasswordForm);
+            try {
+                const res: any = await apiProfileUpdatePassword(value?.id, resetPasswordForm);
                 if (res?.status === 1) {
                     Alert.alert('Update password success');
                     setShowModal(false);
                 } else {
                     Alert.alert('Update password failed ', res?.message);
+                    setShowModal(false);
+                    setApiError(true);
                 }
-            }catch(e){
-                console.log('error', e);
+            } catch (e: any) {
+                if (e?.response?.status === 401) {
+                    setShowModal(false);
+                    Alert.alert('You have been logged out. Please login again');
+                    hasJWT_Error && hasJWT_Error(true);
+                }
             }
         }
     }
@@ -126,10 +134,15 @@ const ProfileItem = ({ icon, lable, value, onPress, type, isChanged }: { icon?: 
                         setShowModal(false);
                     } else {
                         Alert.alert('Update failed');
+                        setShowModal(false);
                     }
                 }
-            } catch (e) {
-                console.log('error', e);
+            } catch (e: any) {
+                if (e?.response?.status === 401) {
+                    setShowModal(false);
+                    Alert.alert('You have been logged out. Please login again');
+                    hasJWT_Error && hasJWT_Error(true);
+                }
             }
             handleChange();
             setLoading(false);
@@ -526,6 +539,7 @@ const Profile = ({ navigation }: { navigation: any }) => {
     const [loading, setLoading] = React.useState(false);
     const [showModal, setShowModal] = React.useState(false);
     const [isChanged, setIsChanged] = React.useState(false);
+    const [JWT_Error, setJWT_Error] = React.useState(false);
     // async function loadUser() {
     //     setLoading(true);
     //     setUser(userData);
@@ -563,6 +577,13 @@ const Profile = ({ navigation }: { navigation: any }) => {
             setIsChanged(false);
         }
     }, [isChanged]);
+    useEffect(() => {
+        if (JWT_Error) {
+            userLogout();
+            deleteAllUserData();
+            navigation.navigate('Home');
+        }
+    }, [JWT_Error]);
     const deleteAllUserData = async () => {
         await realm.write(() => {
             realm.deleteAll();
@@ -571,6 +592,7 @@ const Profile = ({ navigation }: { navigation: any }) => {
     async function userLogout() {
         console.log('logout clicked - remove user from async storage');
         await deleteUser();
+        await deleteToken();
     }
     function renderHeader() {
         return (
@@ -642,6 +664,7 @@ const Profile = ({ navigation }: { navigation: any }) => {
                         onPress={true}
                         type={'full_name'}
                         isChanged={setIsChanged}
+                        hasJWT_Error={setJWT_Error}
                     />
 
                     <LineDivider />
@@ -659,6 +682,7 @@ const Profile = ({ navigation }: { navigation: any }) => {
                         value={{ id: user?.id, value: user?.phone_number }}
                         onPress={true}
                         type={'phone_number'}
+                        hasJWT_Error={setJWT_Error}
                         isChanged={setIsChanged}
                     />
 
@@ -671,6 +695,7 @@ const Profile = ({ navigation }: { navigation: any }) => {
                         onPress={true}
                         type={'address'}
                         isChanged={setIsChanged}
+                        hasJWT_Error={setJWT_Error}
                     />
 
                     <LineDivider />
@@ -684,6 +709,7 @@ const Profile = ({ navigation }: { navigation: any }) => {
                         }}
                         type={'password'}
                         isChanged={setIsChanged}
+                        hasJWT_Error={setJWT_Error}
                     />
                 </View>
             </>
@@ -725,12 +751,12 @@ const Profile = ({ navigation }: { navigation: any }) => {
     }
 
     return (
-        user ? (
-            <>
-                <Spinner
-                    visible={loading}
-                    textContent={'Loading...'}
-                    textStyle={{ color: '#FFF' }} />
+        <>
+            <Spinner
+                visible={loading}
+                textContent={'Loading...'}
+                textStyle={{ color: '#FFF' }} />
+            {user?.email ? (
                 <View className="flex-1 " style={{ backgroundColor: COLORS.white }}>
                     {renderHeader()}
                     <ScrollView
@@ -749,6 +775,7 @@ const Profile = ({ navigation }: { navigation: any }) => {
                                 onPress={() => {
                                     userLogout();
                                     deleteAllUserData();
+
                                     navigation.navigate('Login');
                                 }}
                                 className="flex-row items-center justify-center h-[60] rounded-[15]"
@@ -763,55 +790,54 @@ const Profile = ({ navigation }: { navigation: any }) => {
                         </View>
                     </ScrollView>
                 </View>
-            </>
-
-        ) : (
-            <View className="flex-1 items-center justify-center">
-                <Text className="text-black" style={{ ...FONTS.h1 }}>
-                    <View className='flex-row items-center' style={{ flexDirection: 'row', }}>
-                        <TextButton
-                            label='Log In'
-                            customContainerClassName=''
-                            customContainerStyle={{
-                                width: 100,
-                                height: 40,
-                                borderRadius: 20,
-                                backgroundColor: COLORS.primary,
-                                marginTop: SIZES.radius,
-                                paddingHorizontal: 10
-                            }}
-                            customLabelStyle={{
-                                ...FONTS.h3,
-                                color: COLORS.white
-                            }}
-                            onPress={() => navigation.navigate('Login')}
-                        />
-                        <TextButton
-                            label='Sign Up'
-                            customContainerClassName=''
-                            customContainerStyle={{
-                                width: 100,
-                                height: 40,
-                                borderRadius: 20,
-                                backgroundColor: COLORS.white,
-                                borderColor: COLORS.primary,
-                                borderWidth: 1,
-                                marginTop: SIZES.radius,
-                                paddingHorizontal: 10,
-                                marginLeft: 10
-                            }}
-                            customLabelStyle={{
-                                ...FONTS.h3,
-                                color: COLORS.primary
-                            }}
-                            onPress={() => navigation.navigate('SignupStep01')}
-                        />
-                    </View>
-                </Text>
+            ) : (
+                <View className="flex-1 items-center justify-center">
+                    <Text className="text-black" style={{ ...FONTS.h1 }}>
+                        <View className='flex-row items-center' style={{ flexDirection: 'row', }}>
+                            <TextButton
+                                label='Log In'
+                                customContainerClassName=''
+                                customContainerStyle={{
+                                    width: 100,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    backgroundColor: COLORS.primary,
+                                    marginTop: SIZES.radius,
+                                    paddingHorizontal: 10
+                                }}
+                                customLabelStyle={{
+                                    ...FONTS.h3,
+                                    color: COLORS.white
+                                }}
+                                onPress={() => navigation.navigate('Login')}
+                            />
+                            <TextButton
+                                label='Sign Up'
+                                customContainerClassName=''
+                                customContainerStyle={{
+                                    width: 100,
+                                    height: 40,
+                                    borderRadius: 20,
+                                    backgroundColor: COLORS.white,
+                                    borderColor: COLORS.primary,
+                                    borderWidth: 1,
+                                    marginTop: SIZES.radius,
+                                    paddingHorizontal: 10,
+                                    marginLeft: 10
+                                }}
+                                customLabelStyle={{
+                                    ...FONTS.h3,
+                                    color: COLORS.primary
+                                }}
+                                onPress={() => navigation.navigate('SignupStep01')}
+                            />
+                        </View>
+                    </Text>
 
 
-            </View>
-        )
+                </View>
+            )}
+        </>
     );
 };
 const styles = StyleSheet.create({

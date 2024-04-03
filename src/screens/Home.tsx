@@ -19,7 +19,7 @@ import { apiGetCourse } from '../apis/course';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { getUser } from '../storage/AsyncStorage';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import { NavigationAction } from '@react-navigation/native';
 const Section = ({ containerStyle, title, onPress, children }: any) => {
   return (
     <View
@@ -68,8 +68,8 @@ function Home({ navigation }: { navigation: any; }) {
   const [loadingUser, setLoadingUser] = React.useState(false);
   const [loadingRating, setLoadingRating] = useState(true);
   const [loadingSub, setLoadingSub] = useState(true);
-  const [highestRatingCourses, setHighestRatingCourses] = useState({data:[]});
-  const [highestSubCourses, setHighestSubCourses] = useState({data:[]});
+  const [highestRatingCourses, setHighestRatingCourses] = useState({ data: [] });
+  const [highestSubCourses, setHighestSubCourses] = useState({ data: [] });
 
   const buildCouses = async () => {
 
@@ -128,10 +128,10 @@ function Home({ navigation }: { navigation: any; }) {
   }
   useEffect(() => {
     // const unsubscribe = navigation.addListener('focus', () => {
-      loadUser();
-      loadCategoryList();
-      buildCouses();
-      console.log('Home screen is focused')
+    loadUser();
+    loadCategoryList();
+    buildCouses();
+    console.log('Home screen is focused')
     // });
 
 
@@ -139,8 +139,8 @@ function Home({ navigation }: { navigation: any; }) {
       setUser(null);
       setLoading(false);
       setCategories([]);
-      setHighestRatingCourses({data:[]});
-      setHighestSubCourses({data:[]});
+      setHighestRatingCourses({ data: [] });
+      setHighestSubCourses({ data: [] });
       // unsubscribe;
     };
   }, []);
@@ -209,99 +209,6 @@ function Home({ navigation }: { navigation: any; }) {
     );
   }
 
-  function renderBanner() {
-    return (
-      <ImageBackground
-        className='items-start'
-        source={images.featured_bg_image}
-        style={{
-          marginTop: SIZES.padding,
-          marginHorizontal: SIZES.padding,
-          padding: 15,
-        }}
-        imageStyle={{
-          borderRadius: SIZES.radius
-        }}>
-        <View>
-          <Text
-            className={``}
-            style={{
-              color: COLORS.white,
-              ...FONTS.body2
-            }}>
-            HOW TO
-          </Text>
-          <Text
-            className='text-[#fff] '
-            style={{
-              ...FONTS.h2
-            }}>
-            Learn this and learn that and gain 1000 IQ
-          </Text>
-          <Text
-            className='text-white'
-            style={{
-              marginTop: SIZES.radius,
-              ...FONTS.body4
-            }}>
-            By DeluluMeeeee
-          </Text>
-
-          <Image
-            className='ju'
-            source={images.start_learning}
-            style={{
-              height: 100,
-              marginTop: SIZES.padding,
-
-            }} />
-
-          <TextButton
-            label='Start Learning'
-            customLabelClassName={''}
-            customContainerClassName={'justify-start'}
-            customContainerStyle={{
-              height: 40,
-              // width: 150,
-              paddingHorizontal: SIZES.padding,
-              borderRadius: 20,
-              backgroundColor: COLORS.white
-            }}
-            customLabelStyle={{
-              color: COLORS.black,
-            }}
-          >
-
-          </TextButton>
-        </View>
-
-      </ImageBackground>
-    );
-  }
-
-  function renderCourses() {
-    return (
-      <FlatList
-        horizontal
-        data={dummyData.courses_list_1}
-        key={'courses'}
-        keyExtractor={(item) => `course-${item.id}`}
-        showsHorizontalScrollIndicator={false}
-        contentContainerStyle={{
-          marginTop: SIZES.padding
-        }}
-        renderItem={({ item, index }) => (
-          <VerticalCourseCard
-            containerStyle={{
-              marginLeft: index === 0 ? SIZES.padding : SIZES.radius,
-              marginRight: index === dummyData.courses_list_1.length - 1 ? SIZES.padding : 0
-            }}
-            course={item}
-          />
-        )}
-      />
-    );
-  }
 
   function renderCategory() {
     return (
@@ -326,7 +233,9 @@ function Home({ navigation }: { navigation: any; }) {
                 marginRight: index === categories.length - 1 ? SIZES.padding : 0
               }}
               category={item}
-              onPress={() => console.log('CategoryCard')}
+              onPress={() => navigation.reset({
+                routes: [{ name: 'Search', params: { category: item } }]
+              })}
             />
           )}
         >
@@ -355,6 +264,7 @@ function Home({ navigation }: { navigation: any; }) {
           }}
           renderItem={({ item, index }) => (
             <HorizontalCourseCard
+              navigation={navigation}
               containerStyle={{
                 marginTop: index === 0 ? SIZES.radius : SIZES.padding,
                 marginVertical: SIZES.padding,
@@ -394,6 +304,8 @@ function Home({ navigation }: { navigation: any; }) {
           }}
           renderItem={({ item, index }) => (
             <HorizontalCourseCard
+              navigation={navigation}
+              // onPress={() => console.log('CourseDetail')}
               containerStyle={{
                 marginTop: index === 0 ? SIZES.radius : SIZES.padding,
                 marginVertical: SIZES.padding,

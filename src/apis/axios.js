@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { deleteUser, getAccessToken, getRefreshToken, saveToken } from '../storage/AsyncStorage';
+import { deleteToken, deleteUser, getAccessToken, getRefreshToken, saveToken } from '../storage/AsyncStorage';
 import { apiRefreshToken } from './refreshToken';
 import { logout, updateToken } from '../store/User/userSlice';
 import { apiLogOut } from './user';
@@ -12,8 +12,8 @@ instance.interceptors.request.use(async function (config) {
     // const accessToken = store.getState().user.token;
     const accessToken = await getAccessToken();
     const refreshToken = await getRefreshToken();
-    console.log("accessToken---" + accessToken);
-    console.log("refreshToken---" + refreshToken);
+    // console.log("accessToken---" + accessToken);
+    // console.log("refreshToken---" + refreshToken);
     if (accessToken && config.headers.hasOwnProperty('Authorization'))
         config.headers = {
             ...config.headers,
@@ -32,6 +32,7 @@ instance.interceptors.response.use(async function (response) {
         console.log("refreshToken---" + refreshToken);
         await apiLogOut(refreshToken);
         await deleteUser()
+        await deleteToken()
     }
     return response?.data;
 }, async function (error) {
@@ -56,10 +57,14 @@ instance.interceptors.response.use(async function (response) {
                     prevRequest.headers['Authorization'] = `Bearer ${resp.data.token}`;
                     return instance(prevRequest);
                 } else {
+                    await deleteToken()
+
                     await deleteUser();
                 }
             } catch (refreshError) {
                 console.log("Refresh token request failed:", refreshError);
+                await deleteToken()
+
                 await deleteUser();
             } finally {
                 isRefreshing = false;
