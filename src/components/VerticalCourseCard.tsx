@@ -5,18 +5,19 @@ import {
     Image,
     TouchableOpacity
 } from 'react-native';
-import { COLORS, SIZES, FONTS, constants, icons } from '../constants';
+import { COLORS, SIZES, FONTS, constants, icons, images } from '../constants';
 import  IconLabel  from './IconLabel';
 
-const VerticalCourseCard = ({ containerStyle, course, onPress }: any) => {
+const VerticalCourseCard = ({ containerStyle, course, onPress, navigation }: any) => {
     return (
         <TouchableOpacity
+            onPress={()=> {navigation.navigate('CourseDetail', {course: course})}}
             style={{
                 width: 270,
                 ...containerStyle
             }}>
             <Image
-                source={course?.thumbnail}
+                source={course.image_path ? { uri: course.image_path } : images.featured_bg_image}
                 resizeMode='cover'
                 style={{
                     width: '100%',
@@ -67,15 +68,15 @@ const VerticalCourseCard = ({ containerStyle, course, onPress }: any) => {
                             fontSize: 18,
                             // height: 45
                         }}>
-                        {`DeluluDeluluDelulu course -- ${course?.title}`}
+                        {`${course?.name}`}
                     </Text>
 
-                    <IconLabel
+                    {/* <IconLabel
                         icon={icons.time}
                         label={course.duration}
                         containerStyle={{
                             marginTop: SIZES.base,
-                        }} />
+                        }} /> */}
                 </View>
             </View>
         </TouchableOpacity>

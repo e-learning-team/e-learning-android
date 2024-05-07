@@ -15,7 +15,7 @@ import { UserLoginData, useQuery, useRealm } from '../models/UserLoginData';
 import { BSON } from 'realm';
 import { apiLogin } from '../apis/user';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { deleteAll, saveToken, saveUser } from '../storage/AsyncStorage';
+import { deleteAll, getUser, saveToken, saveUser } from '../storage/AsyncStorage';
 import { extractVideoGoogleGDriveUrlId, formatTimeStampTo_DDMMYYY, getVideoThumbnailGoogleGDriveUrl } from '../utils/helper';
 import { Rating } from 'react-native-ratings';
 import { apiGetCourse } from '../apis/course';
@@ -24,6 +24,10 @@ import Video from 'react-native-video';
 import VideoPlayer from 'react-native-video-player';
 import { useWindowDimensions } from 'react-native';
 import RenderHtml from 'react-native-render-html';
+import { apiCheckEnrollment } from '../apis/enrollment';
+import { apiGetPaymentUrl } from '../apis/invoice';
+import { WebView } from 'react-native-webview';
+import { Linking } from 'react-native';
 
 const VideoModal = ({ title, source, visible, onPress }: { title: string, source: string, visible: boolean, onPress: any }) => {
     const [showModal, setShowModal] = useState(visible);
@@ -59,7 +63,7 @@ const VideoModal = ({ title, source, visible, onPress }: { title: string, source
                     alignItems: 'center',
                 }}>
                     <View className={`w-full h-full  items-center`} style={{
-                        backgroundColor: COLORS.additionalColor9, 
+                        backgroundColor: COLORS.additionalColor9,
                         borderTopLeftRadius: SIZES.radius,
                         borderTopRightRadius: SIZES.radius,
                     }}>
@@ -96,9 +100,9 @@ const VideoModal = ({ title, source, visible, onPress }: { title: string, source
                                 showDuration={true}
                                 // videoWidth={500}
                                 controlsTimeout={2000}
-                                disableSeek={true}
+                                // disableSeek={true}
                                 autoplay={true}
-                                onLoad={() => { setVideoLoading(false)}}
+                                onLoad={() => { setVideoLoading(false) }}
                                 resizeMode='cover'
                             />
                         </View>
@@ -135,6 +139,9 @@ const CourseDetail = ({ navigation, route }: { navigation: any; route: any }) =>
     const [loading, setLoading] = useState(false);
     const [course, setCourse] = useState<any>(route.params.course);
     const { width, height } = useWindowDimensions();
+    const [user, setUser] = useState<any>(null);
+    const [checkEnroll, setCheckEnroll] = useState(false);
+    const [checkOutURL, setCheckOutURL] = useState<any>('');
     async function loadCourseDetail() {
         setLoading(true);
         try {
@@ -152,9 +159,61 @@ const CourseDetail = ({ navigation, route }: { navigation: any; route: any }) =>
         }
         setLoading(false);
     }
+
+    async function loadUser() {
+        let u = await getUser();
+        if (u) {
+            setUser(u);
+        }
+    }
+    async function checkUserEnrollment(courseId: String) {
+        // console.log('checkUserEnrollment:', courseId);
+        if (courseId) {
+            const res = await apiCheckEnrollment(courseId);
+            // console.log('checkUserEnrollment:', JSON.stringify(res, null, 2));
+            if (res && res.data) {
+                setCheckEnroll(res.data);
+            }
+        }
+    }
+    const handleEnroll = async () => {
+        if (!user) {
+            ToastAndroid.show('Please Login first please!!', ToastAndroid.SHORT);
+            return;
+        }
+
+        const data = {
+            user_id: user.id,
+            course_id: course.id,
+        }
+        if (course.price_sell > 0) {
+            const res = await apiGetPaymentUrl(data.course_id, data.user_id)
+            if (res?.status === 0) {
+                ToastAndroid.show('Failed to get payment url', ToastAndroid.SHORT);
+            } else {
+                console.log('res:', res.toString());
+                navigation.navigate('CheckOut', { course: course, url: res.toString() });
+                // setCheckOutURL(res)
+                // const supported = await Linking.canOpenURL(res.toString());
+                // console.log('supported:', supported)
+                // if (supported) {
+                //     await Linking.openURL(res.toString());
+                // }
+            }
+        }
+        // console.log('data:', data);
+    }
     useEffect(() => {
         loadCourseDetail();
     }, []);
+    useEffect(() => {
+        loadUser();
+    }, []);
+    useEffect(() => {
+        if (user) {
+            checkUserEnrollment(course.id)
+        }
+    }, [user]);
     useEffect(() => {
         if (course) {
             // console.log('response:', JSON.stringify(course, null, 2));
@@ -365,39 +424,61 @@ const CourseDetail = ({ navigation, route }: { navigation: any; route: any }) =>
                         color: COLORS.gray30,
                     }} />
                 <View className='flex-row items-center' style={{ padding: SIZES.padding, }}>
-                    <View className=' mx-[20] mr-[30]' style={{
-                        // flex:1,
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                    }}>
-                        {/* price */}
-                        <View>
-                            <Text className='' style={{
-                                ...FONTS.h2,
-                                color: COLORS.primary,
-                            }}>
-                                {course?.price_sell > 0 ? `$ ${course?.price_sell.toLocaleString()}` : 'Free'}
-                            </Text>
-                            {/* <Text className='' style={{
-                                ...FONTS.body3,
-                                color: COLORS.gray10,
-                            }}>
-                                {course?.attributes?.attributeValue == 0 ? `$ ${course?.attributes?.attributeValue}` : ''}
-                            </Text> */}
+                    {checkEnroll ? (
+                        <View className='flex-1'>
+                            <TextButton
+                                label='Learn Now'
+                                customContainerStyle={{
+                                    height: 60,
+                                    flex: 3,
+                                    borderRadius: SIZES.radius,
+                                    backgroundColor: COLORS.primary
+                                }}
+                                onPress={() => {
+                                    console.log('Learn Now')
+                                }}
+                            />
                         </View>
-                    </View>
-                    <TextButton
-                        label='Enroll Now'
-                        customContainerStyle={{
-                            height: 60,
-                            flex: 3,
-                            borderRadius: SIZES.radius,
-                            backgroundColor: COLORS.primary
-                        }}
-                        onPress={() => {
-                            console.log('Enroll Now')
-                        }}
-                    />
+
+                    ) : (
+                        <>
+                            <View className=' mx-[20] mr-[30]' style={{
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                            }}>
+                                <View>
+                                    <Text className='' style={{
+                                        ...FONTS.h2,
+                                        color: COLORS.primary,
+                                    }}>
+                                        {course?.price_sell > 0 ? `$ ${course?.price_sell.toLocaleString()}` : 'Free'}
+                                    </Text>
+
+                                    {(course?.attributes && course?.attributes[0]?.attributeValue) && (
+                                        <Text className='' style={{
+                                            ...FONTS.body3,
+                                            color: COLORS.gray70,
+                                            textDecorationLine: 'line-through'
+                                        }}>
+                                            {course?.attributes[0]?.attributeValue !== 0 ? `$ ${course?.attributes[0]?.attributeValue.toLocaleString()}` : ''}
+                                        </Text>
+                                    )}
+                                </View>
+                            </View>
+                            <TextButton
+                                label='Enroll Now'
+                                customContainerStyle={{
+                                    height: 60,
+                                    flex: 3,
+                                    borderRadius: SIZES.radius,
+                                    backgroundColor: COLORS.primary
+                                }}
+                                onPress={() => {
+                                    handleEnroll()
+                                }}
+                            />
+                        </>
+                    )}
                 </View>
             </View>
         )

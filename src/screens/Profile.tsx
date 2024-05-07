@@ -12,13 +12,15 @@ import {
     Pressable,
     TextInput,
     TouchableWithoutFeedback,
+    FlatList,
 } from 'react-native';
 import { useRealm } from '../models/UserLoginData';
 import { deleteToken, deleteUser, getAccessToken, getUser, saveUser } from '../storage/AsyncStorage';
 import { COLORS, SIZES, FONTS, images, icons } from '../constants';
-import { LineDivider, TextButton } from '../components';
+import { LineDivider, TextButton, VerticalCourseCard } from '../components';
 import { apiProfileUpdate, apiProfileUpdateAddress, apiProfileUpdateFullName, apiProfileUpdatePassword, apiProfileUpdatePhoneNumber, apiUserDetail } from '../apis/user';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { apiMyEnrollment } from '../apis/enrollment';
 
 // import Overlay from 'react-native-modal-overlay';
 const ProfileItem = ({ icon, lable, value, onPress, type, isChanged, hasJWT_Error }: { icon?: any; lable?: string; value?: any; onPress?: any; type?: any; isChanged?: any, hasJWT_Error?: any }) => {
@@ -540,11 +542,29 @@ const Profile = ({ navigation }: { navigation: any }) => {
     const [showModal, setShowModal] = React.useState(false);
     const [isChanged, setIsChanged] = React.useState(false);
     const [JWT_Error, setJWT_Error] = React.useState(false);
+    const [enrollmentData, setEnrollmentData] = React.useState([]);
     // async function loadUser() {
     //     setLoading(true);
     //     setUser(userData);
     //     setLoading(false);
     // }
+    const getMyEnrollment = async () => {
+        setLoading(true);
+        try {
+            const params = {
+                build_course_child: false
+            };
+            const res = await apiMyEnrollment(params);
+            if (res?.data?.data) {
+                setEnrollmentData(res.data?.data);
+                console.log(res.data?.data.length);
+            }
+
+        } catch (e) {
+        }
+        setLoading(false);
+    };
+
     async function loaduserFromAPI() {
         if (!loading) {
             setLoading(true);
@@ -584,6 +604,12 @@ const Profile = ({ navigation }: { navigation: any }) => {
             navigation.navigate('Home');
         }
     }, [JWT_Error]);
+
+    useEffect(() => {
+        if (user) {
+            getMyEnrollment();
+        }
+    }, [user])
     const deleteAllUserData = async () => {
         await realm.write(() => {
             realm.deleteAll();
@@ -718,34 +744,51 @@ const Profile = ({ navigation }: { navigation: any }) => {
     function renderProfileSection2() {
         return (
             <>
-                <View className='flex-row justify-between' style={{ marginTop: SIZES.padding }}>
-                    <Text style={{ ...FONTS.h3, color: COLORS.primary }}>Lecturer Info</Text>
-                    <TouchableOpacity className=''>
-                        <Text style={{ ...FONTS.h3, color: COLORS.primary }}>Change</Text>
-                    </TouchableOpacity>
+                <View className='flex-row justify-between ' style={{ marginTop: SIZES.padding }}>
+                    <Text style={{ ...FONTS.h3, color: COLORS.primary }}>My Enrollments</Text>
                 </View>
-                <View style={styles.profileSectionContainer}>
-                    <ProfileItem
-                        icon={icons.profile}
-                        lable="Name"
-                        value={user?.full_name}
-                    />
 
-                    <LineDivider />
+                <View className='mt-[10] mb-[20]'>
 
-                    <ProfileItem icon={icons.email} lable="Email" value={user?.email} />
+                    {enrollmentData.length > 0 ? (
+                        <>
+                            {/* {enrollmentData.map((data: any, index: number) => { */}
+                            {/* return( */}
+                            <Text>Total: {enrollmentData.length}</Text>
+                            <FlatList
+                                horizontal
+                                // data={dummyData.categories}
+                                data={enrollmentData}
+                                key={'enrollment'}
+                                keyExtractor={(item: any) => `enrollment-${item?.id}`}
+                                showsHorizontalScrollIndicator={false}
+                                contentContainerStyle={{
+                                    marginTop: SIZES.radius
 
-                    <LineDivider />
+                                }}
 
-                    <ProfileItem
-                        icon={icons.password}
-                        lable="Password"
-                        value="Change Password"
-                        onPress={() => {
-                            console.log('PASSWORD');
-                        }}
-                    />
+                                ListFooterComponent={() => { return <></> }}
+                                renderItem={({ item, index }) => (
+                                    <VerticalCourseCard
+                                        course={item.course}
+                                        navigation={navigation}
+                                        containerStyle={{
+                                            marginLeft: index === 0 ? 0 : SIZES.padding,
+                                            marginRight: index === enrollmentData.length - 1 ? SIZES.padding : 0
+                                        }}
+                                    />
+                                )}
+                            >
+
+                            </FlatList>
+                            {/* ) */}
+                            {/* })} */}
+                        </>
+                    ) : (
+                        <Text>No Enrollment yet</Text>
+                    )}
                 </View>
+
             </>
         );
     }
@@ -767,6 +810,8 @@ const Profile = ({ navigation }: { navigation: any }) => {
                         {renderProfileCard()}
 
                         {renderProfileSection1()}
+
+                        {renderProfileSection2()}
 
                         {/* {renderProfileSection2()} */}
 

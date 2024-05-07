@@ -242,6 +242,10 @@ const Login = ({ navigation }: { navigation: any; }) => {
                         </Text>
                     </TouchableOpacity>
                 </View>
+                
+                <TouchableOpacity className='w-full flex-row justify-center mt-[10]' onPress={()=> navigation.navigate('Dashboard')}>
+                    <Text>Not now</Text>
+                </TouchableOpacity>
             </View>
 
             <Spinner
