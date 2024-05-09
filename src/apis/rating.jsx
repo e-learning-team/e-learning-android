@@ -8,3 +8,11 @@ export const apiRatingCourse = (data) => axios({
         'Authorization': ``,
     }
 })
+
+export const apiGetUserRating = (courseId, userId) => axios({
+    url: `/rating/${courseId}/${userId}`,
+    method: 'get',
+    // headers: {
+    //     'Authorization': ``,
+    // }
+})

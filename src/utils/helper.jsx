@@ -5,6 +5,9 @@ export const getVideoThumbnailGoogleGDriveUrl = (videoId) => `https://drive.goog
 export const createSlug = string => string.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").split(' ').join('-');
 export const formatMoney = number => Number(number?.toFixed(1)).toLocaleString();
 
+export const emailRegex = /^[a-zA-Z0-9\+\.\_\%\-\+]{1,256}\@[a-zA-Z0-9][a-zA-Z0-9\-]{0,62}(\.[a-zA-Z0-9][a-zA-Z0-9\-]{0,25})+$/;
+export const validateEmail = email => emailRegex.test(email);
+
 export function extractIdSlug(inputString) {
     const regex = /-(\d+)$/; // Match a hyphen followed by one or more digits at the end of the string
     const match = inputString.match(regex);

@@ -17,6 +17,7 @@ import ForgetPasswordStep03 from "./ForgetPassword/ForgetPasswordStep03"
 import CourseDetail from "./CourseDetail"
 
 import CheckOutScreen from "./CheckOutScreen"
+import CourseLearn from "./CourseLearn"
 export {
     MainLayout,
     Home,
@@ -31,5 +32,6 @@ export {
     ForgetPasswordStep02,
     ForgetPasswordStep03,
     CourseDetail,
-    CheckOutScreen
+    CheckOutScreen,
+    CourseLearn
 }

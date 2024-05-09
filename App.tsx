@@ -23,6 +23,7 @@ import {
     Search,
     CourseDetail,
     CheckOutScreen,
+    CourseLearn,
 } from './src/screens';
 import Tabs from './src/naviagtion/tabs';
 import { Text, View } from 'react-native';
@@ -66,7 +67,7 @@ function App(): React.JSX.Element {
                         <Stack.Screen name="Profile" component={Profile} />
 
                         <Stack.Screen name="CheckOut" component={CheckOutScreen} />
-
+                        <Stack.Screen name="CourseLearn" component={CourseLearn} />
 
                     </Stack.Navigator>
                 </NavigationContainer >

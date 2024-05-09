@@ -33,7 +33,7 @@ function CustomUpDownIcon({ open }: { open: boolean }) {
             }} />
     );
 }
-const CourseAccordion = ({ course, children }: { course?: any; children: any }) => {
+const CourseAccordion = ({ course, children, clickedCourse }: { course?: any; children: any; clickedCourse?: any }) => {
     const [expanded, setExpanded] = useState(false);
     // const list2 = [
     //     {
@@ -47,6 +47,9 @@ const CourseAccordion = ({ course, children }: { course?: any; children: any }) 
     //         subtitle: 'Vice Chairman'
     //     },
     // ];
+    function handleClickedCourse(course: any){
+        clickedCourse && clickedCourse(course);
+    }
     return (
         <View style={{
             borderWidth: 1,
@@ -81,9 +84,17 @@ const CourseAccordion = ({ course, children }: { course?: any; children: any }) 
                     <ListItem key={i} topDivider bottomDivider>
                         {/* <Avatar title={l.name[0]} source={{ uri: l.avatar_url }} /> */}
                         <ListItem.Content style={{ marginLeft: 10 }}>
-                            <Text className='font-medium'>
-                                {l?.name}
-                            </Text>
+                            {clickedCourse ? (
+                                <TouchableOpacity className='flex-1 w-full h-full' onPress={() => { handleClickedCourse(l) }}>
+                                    <Text className='font-medium w-full h-full'>
+                                        {l?.name} | {l?.video_path ? 'Watched' : 'Not Watched'}
+                                    </Text>
+                                </TouchableOpacity>
+                            ) : (
+                                <Text className='font-medium'>
+                                    {l?.name}
+                                </Text>
+                            )}
                             {/* <ListItem.Subtitle>{l.subtitle}</ListItem.Subtitle> */}
                         </ListItem.Content>
                         {/* <ListItem.Chevron /> */}

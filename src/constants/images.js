@@ -17,6 +17,9 @@ const thumbnail_2 = require("../assets/images/thumbnail_2.png")
 const thumbnail_3 = require("../assets/images/thumbnail_3.png")
 const thumbnail_4 = require("../assets/images/thumbnail_4.png")
 const splash_screen_logo = require("../assets/images/splash_screen_logo.png")
+const payment_success = require("../assets/images/payment_success.jpg")
+const payment_success_png = require("../assets/images/payment_success.png")
+const payment_failed_png = require("../assets/images/payment_failed.png")
 export default {
     bg,
     bg_dark,
@@ -40,5 +43,10 @@ export default {
     thumbnail_3,
     thumbnail_4,
 
-    splash_screen_logo
+    splash_screen_logo,
+
+    payment_success,
+    payment_success_png,
+
+    payment_failed_png,
 }

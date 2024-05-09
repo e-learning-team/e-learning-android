@@ -28,17 +28,26 @@ export const apiSendEmailVerification = (data) => axios({
     method: 'post',
     data
 })
+export const apiConfirmEmailVerification = (email, code) => axios({
+    url: `/auth/register/mobile/${email}/${code}`,
+    method: 'post',
+})
 
 export const apiSendForgetPassword = (data) => axios({
     url: '/user/password/reset',
     method:'post',
     data
 })
+export const apiPasswordConfirmCode = (email, code) => axios({
+    url: `/user/password/reset/mobile/${email}/${code}`,
+    method: 'post',
+})
 export const apiConfirmForgetPassword = (data) => axios({
     url: '/user/password/reset',
     method:'patch',
     data
 })
+
 export const apiProfileUpdate = (data) => axios({
     url: '/user/profile/update',
     method: 'patch',

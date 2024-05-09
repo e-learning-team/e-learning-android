@@ -491,12 +491,12 @@ const ProfileItem = ({ icon, lable, value, onPress, type, isChanged, hasJWT_Erro
                                             <Text style={{ color: 'red' }}>{errorMessage?.confirmPasswordError}</Text>
                                         </View>
                                     </View>
-                                    <View className='flex-row gap-x-[200] justify-between items-center mt-[40] mb-[20]'>
+                                    <View className='flex-row  justify-between items-center mt-[40] mb-[20]'>
                                         <TouchableOpacity
                                             onPress={() => {
                                                 setShowModal(false);
                                             }}
-                                            className="flex-row items-center bg-[#da4040] px-[20] justify-center h-[40] rounded-[20]"
+                                            className="flex-row items-center mr-[50] bg-[#da4040] px-[20] justify-center h-[40] rounded-[20]"
                                             style={{
                                                 borderRadius: SIZES.radius,
                                                 backgroundColor: '#da4040'
@@ -509,7 +509,7 @@ const ProfileItem = ({ icon, lable, value, onPress, type, isChanged, hasJWT_Erro
                                             onPress={() => {
                                                 handlePasswordChange()
                                             }}
-                                            className="flex-row items-center px-[20] justify-center h-[40] rounded-[20]"
+                                            className="flex-row items-center ml-[50] px-[20] justify-center h-[40] rounded-[20]"
                                             style={{
                                                 backgroundColor: COLORS.primary,
                                                 borderRadius: SIZES.radius,

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Image, ImageBackground, SafeAreaView, ScrollView, Text, View } from 'react-native';
+import { Image, ImageBackground, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native';
 const logo = require('../assets/images/logo.png');
 // import {} from ';
 import { FlatList } from 'react-native-gesture-handler';
@@ -148,9 +148,18 @@ function Home({ navigation }: { navigation: any; }) {
     return (
       <View className='flex flex-row items-center' style={{ marginTop: 40, marginBottom: 10, paddingHorizontal: SIZES.padding }}>
         {user?.full_name ? (
-          <View className='' style={{ flex: 1 }}>
-            <Text className='' style={{ ...FONTS.h2, color: COLORS.black }}>Hello! {`${user?.full_name}`}</Text>
-            <Text className='' style={{ ...FONTS.body3, color: COLORS.gray50 }}>Let's select your item</Text>
+          <View className='flex-row' style={{ flex: 1 }}>
+            <View className='flex-1'>
+              <Text numberOfLines={2} className='' style={{ ...FONTS.h2, color: COLORS.black }}>Hello! {user?.full_name}</Text>
+              <Text className='' style={{ ...FONTS.body3, color: COLORS.gray50 }}>Let's select your item</Text>
+            </View>
+            <TouchableOpacity onPress={() => navigation.navigate('Profile')}>
+              <Image
+                source={user?.avatar ? { uri: user?.avatar } : images.profile}
+                className="w-[60] h-[60] rounded-full border ml-4"
+                style={{ borderColor: COLORS.white }}
+              />
+            </TouchableOpacity>
           </View>
         ) : (
           <View className='' style={{ flex: 1 }}>

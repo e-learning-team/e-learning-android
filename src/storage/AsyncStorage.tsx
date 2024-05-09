@@ -52,20 +52,20 @@ export const saveToken = async (accessToken: string, refreshToken: string, roles
 export const getAccessToken = async () => {
     try {
         const accessToken = await AsyncStorage.getItem('accessToken');
-        console.log('Get from async success:', accessToken ? true : false);
+        // console.log('Get from async success:', accessToken ? true : false);
         return accessToken;
     } catch (error) {
-        console.log('Get from async success failed:', error);
+        // console.log('Get from async success failed:', error);
         return null;
     }
 }
 export const getRefreshToken = async () => {
     try {
         const refreshToken = await AsyncStorage.getItem('refreshToken');
-        console.log('Get from async success:', refreshToken ? true : false);
+        // console.log('Get from async success:', refreshToken ? true : false);
         return refreshToken;
     } catch (error) {
-        console.log('Get from async success failed:', error);
+        // console.log('Get from async success failed:', error);
         return null;
     }
 }

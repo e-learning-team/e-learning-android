@@ -69,6 +69,7 @@ const last_update = require("../assets/icons/last_update.png")
 const users = require("../assets/icons/users.png")
 const chevron_down = require("../assets/icons/chevron_down.png")
 const chevron_up = require("../assets/icons/chevron_up.png")
+const unverified_jpg = require("../assets/icons/unverified.jpg")
 export default {
     all,
     animation,
@@ -136,5 +137,6 @@ export default {
     last_update,
     users,
     chevron_down,
-    chevron_up
+    chevron_up,
+    unverified_jpg
 }
