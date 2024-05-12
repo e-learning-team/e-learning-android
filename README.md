@@ -25,7 +25,7 @@ This is a project for an E-Learning platform, consisting of a RESTful API built 
 
 ## API Setup
 
-1. Clone API repository [1].
+1. Clone API repository [e-learning-api][1].
 2. Navigate to the `e-learning-api` directory.
 3. Choose GitHub Branch: `Main` or `GEN01_AuthenAuthorize`
 4. Make sure you have JDK and Maven installed.
@@ -33,7 +33,7 @@ This is a project for an E-Learning platform, consisting of a RESTful API built 
 
 ## Mobile Setup
 
-1. Clone APP repository [2].
+1. Clone APP repository [e-learning-mobile][2].
 2. Navigate to the `e-learning-mobile` directory.
 3. Make sure you have Node.js and npm (or yarn) installed.
 4. Install the React Native CLI globally: `npm install -g react-native-cli`.
@@ -43,7 +43,7 @@ This is a project for an E-Learning platform, consisting of a RESTful API built 
 
 ## Website Setup(For Admin)
 
-1. Clone WEB repository [3]
+1. Clone WEB repository [e-learning-website][3]
 2. Navigate to the `e-learning-website` directory.
 3. Make sure you have Node.js and npm (or yarn) and ReactJs are installed.
 4. Choose GitHub Branch: `dev` or `main`
@@ -64,6 +64,8 @@ This is a project for an E-Learning platform, consisting of a RESTful API built 
 
 - [Nguyễn Sỹ Hoàng Lâm](https://github.com/thomsonbel12)
 - [Võ Hoàn Hảo](https://github.com/CunoVox)
+
+
 
 
 
