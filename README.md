@@ -9,10 +9,11 @@ This is a project for an E-Learning platform, consisting of a RESTful API built 
 ## Features
 
 - User authentication
+- Forget Password
 - Course management
-- Lesson progress tracking
-- Discussion forums
-- Messaging system
+- Lesson view, enroll, learn
+- Commenting, Rating
+- User Profile management, Change password
 
 ## Technologies Used
 
@@ -65,6 +66,8 @@ This is a project for an E-Learning platform, consisting of a RESTful API built 
 - [Nguyễn Sỹ Hoàng Lâm](https://github.com/thomsonbel12)
 - [Võ Hoàn Hảo](https://github.com/CunoVox)
 
+
+####
 
 
 
